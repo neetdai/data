@@ -44,7 +44,7 @@ class SkipList (object):
 
 	def __randLevel (self):
 		l = 1
-		while l < self.__maxLevel and random.random() < self.__rand:
+		while l <= self.__maxLevel and random.random() < self.__rand:
 			l += 1
 		return l
 
