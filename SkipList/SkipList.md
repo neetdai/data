@@ -12,7 +12,7 @@
 ### 初始化
 我们先建立SkipList的节点
 
-```
+```python
     class Node (object):
 
         def __init__ (self,key,value):
@@ -23,7 +23,7 @@
 
 然后再建立SkipList
 
-```
+```python
     class SkipList (object):
 
         __slot__ = ["__maxLevel","__head","__tail","__rand"]
@@ -58,6 +58,70 @@
 
 ### 插入
 
+```python
+    def Insert (self,key,value):
+
+        if self.__tail.key <= key:
+            self.__tail.key = key + 1
+
+        level = self.__randLevel()      
+
+        node = Node(key,value)
+
+        for index in range(0,level):
+            prev = self.__head
+            while prev.level[index].key <= key:
+                prev = prev.level[index]
+
+            if prev.key == key:
+                prev.value = value
+                break
+            else:
+                node.level.append(prev.level[index])
+                prev.level[index] = node
+
+
+    def __randLevel (self):
+        l = 1
+        while l <= self.__maxLevel and random.random() < self.__rand:
+            l += 1
+        return l
+```
+
+解释一下这两个方法有什么用:
+
+1. 首先要根据 Insert的参数 key 和 value 创建对应的节点,但是一开始是没有层数的,所以就使用 randLevel 这个方法来随机生成节点的层数
+2. 生成了节点后,根据层数循环查询该层中 小于并最接近key 的那一个节点,新节点的那一层的next将指向它的next,它的next指向新节点
+
+如图
+
+原来是这样的
+
+        |------|                                            |------|
+        | head | -----------------------------------------> | tail |
+        |------|                                            |------|
+
+        |------|                                            |------|
+        | head | -----------------------------------------> | tail |
+        |------|                                            |------|
+
+        |------|                                            |------|
+        | head | -----------------------------------------> | tail |
+        |------|                                            |------|
+
+然后 Insert(1,"hello world"),随机到层数是1
+
+        |------|                                            |------|
+        | head | -----------------------------------------> | tail |
+        |------|                                            |------|
+
+        |------|                                            |------|
+        | head | -----------------------------------------> | tail |
+        |------|                                            |------|
+
+        |------|                  |------|                  |------|
+        | head | ---------------> |  1   | ---------------> | tail |
+        |------|                  |------|                  |------|
 
 ---
 在我想象中的跳跃链表就像是一个很奇怪的二维数组,例
@@ -77,4 +141,3 @@
 会像这样跨过一些节点.
 
 假设我要查找 4的节点,从最高层的head开始,先查找同一层是否有指向4这个节点,结果查到3这个节点后就没有了,所以从3这个节点的最高层向下一层查找,然后就找到了4这个节点
-
