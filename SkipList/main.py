@@ -16,3 +16,7 @@ if __name__ == '__main__':
 	s.watch()
 
 	print(s.Search(2))
+
+	s.Remove(2)
+	print(s.Search(2))
+	print(s.Search(3))

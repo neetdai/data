@@ -49,7 +49,23 @@ class SkipList (object):
 		return l
 
 	def Remove (self,key):
-		pass
+
+		prev = self.__head
+
+		currentlevel = self.__maxLevel - 1
+
+		while currentlevel >= 0:
+			while prev != self.__tail:
+				if prev.level[currentlevel].key < key:
+					prev = prev.level[currentlevel]
+				elif prev.level[currentlevel].key == key:
+					node = prev.level[currentlevel]
+					prev.level[currentlevel] = node.level[currentlevel]
+					node.level[currentlevel] = None
+				else:
+					break
+
+			currentlevel -= 1
 
 	def Search (self,key):
 		current = self.__head
