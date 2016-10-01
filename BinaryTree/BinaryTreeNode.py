@@ -5,7 +5,10 @@ __author__ = "neet"
 class BinaryTreeNode (object):
 
 	def __init__ (self,key,value):
-		self.__key = key
+		if isinstance(key,int):
+			self.__key = key
+		else:
+			raise Exception("key must be Integer")
 		self.__value = value
 		self.__count = 0
 		self.__left = None
@@ -46,3 +49,41 @@ class BinaryTreeNode (object):
 
 	def GetCount (self):
 		return self.__count
+
+	# 前序遍历
+	def Preorder_Traversal (self):
+		left = self.__left
+		right = self.__right
+
+		print(self.__key,self.__value)
+		if left != None:
+			left.Preorder_Traversal()
+
+		if right != None:
+			right.Preorder_Traversal()
+
+	# 中序遍历
+	def Inorder_Traversal (self):
+		left = self.__left
+		right = self.__right
+
+		if left != None:
+			left.Inorder_Traversal()
+
+		print(self.__key,self.__value)
+
+		if right != None:
+			right.Inorder_Traversal()
+
+	# 后序遍历
+	def Postorder_Traversal (self):
+		left = self.__left
+		right = self.__right
+
+		if left != None:
+			left.Postorder_Traversal()
+
+		if right != None:
+			right.Postorder_Traversal()
+
+		print(self.__key,self.__value)

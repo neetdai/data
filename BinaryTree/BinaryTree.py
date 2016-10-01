@@ -43,3 +43,38 @@ class BinaryTree (object):
 			else:
 				self.__current = self.__current.GetLeft()
 		return False,None
+
+	def Remove (self,key):
+		exists,node = self.Search(key)
+		if exists == True:
+			
+			parent = node.GetParent()
+			left = node.GetLeft()
+			right = node.GetRight()
+
+			if parent.GetLeft() is node:
+				parent.SetLeft(None)
+			else:
+				parent.SetRight(None)
+
+			node.SetParent(None)
+
+			if left != None:
+				self.Insert(left)
+			if right != None:
+				self.Insert(right)
+
+	def Preorder_Traversal (self):
+		self.__current = self.__head
+		if self.__current != None:
+			self.__current.Preorder_Traversal()
+
+	def Postorder_Traversal (self):
+		self.__current = self.__head
+		if self.__current != None:
+			self.__current.Postorder_Traversal()
+
+	def Inorder_Traversal (self):
+		self.__current = self.__head
+		if self.__current != None:
+			self.__current.Inorder_Traversal()
