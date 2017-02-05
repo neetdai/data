@@ -13,7 +13,7 @@ class Entry (object):
 
 class HashTable (object):
 
-	def __init__ (self,size):
+	def __init__ (self,size = 64):
 		self.__size = size
 		self.__sizemark = self.__size - 1
 		self.__table = [None for _ in range(0,self.__size)]
@@ -95,10 +95,22 @@ class HashTable (object):
 		
 		return h
 
-	def __setitem__ (self,key,value):
+	def __rehash (self,table):
+		if self.__used >= self.__sizemark:
+			self.__size = self.__size << 1
+			self.__table = [None for _ in range(0,self.__size)]
+			self.__sizemark = self.__size - 1
 
+			for item in table:
+				current = item
+				while current != None:
+					self.__setitem__(current.key,current.value)
+					current = current.next
+
+	def __setitem__ (self,key,value):
+		self.__rehash(self.__table)
 		h = self.__hash(key,self.__sizemark)
-		position = h % self.__sizemark
+		position = h & self.__sizemark
 		
 		if self.__table[position] == None:
 			self.__table[position] = Entry(key,value)
@@ -114,12 +126,11 @@ class HashTable (object):
 			else:
 				e = Entry(key,value)
 				e.next = current
-				current = e
+				self.__table[position] = e
 
 	def __getitem__ (self,key):
 		h = self.__hash(key,self.__sizemark)
-		position = h % self.__sizemark
-		
+		position = h & self.__sizemark
 		if position < 0 or position >= self.__size:
 			return None
 		elif self.__table[position] != None:
